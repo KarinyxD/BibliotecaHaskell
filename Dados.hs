@@ -1,4 +1,3 @@
-import Util
 module Dados where
 -- Questão 02 [1,0]. Crie no módulo Dados um Tipo Abstrato de Dados (TAD) Set para armazenar
 -- valores de tipos pertencentes a classe Dado. Set (conjunto) é um TAD semelhante a uma lista,
@@ -19,8 +18,8 @@ class Dado a where
 data Set t = S [t] deriving (Eq) 
 
 inserir :: (Dado t, Eq t) => t -> Set t -> Set t
-remover :: (Dado t, Eq t) t => t -> Set t -> Set t
-buscar :: (Dado t, Eq t) t => t -> Set t -> Bool
+remover :: (Dado t, Eq t) => t -> Set t -> Set t
+buscar :: (Dado t, Eq t)=> t -> Set t -> Bool
 verifica :: Set t -> Bool
 
 inserir x (S xs)  

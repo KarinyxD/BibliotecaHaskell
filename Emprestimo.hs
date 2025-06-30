@@ -18,7 +18,7 @@ instance Dado Emprestimo where
     putStrLn "Aluno:"
     imprimir aluno
     putStrLn (formata "Data de Emprestimo:" (dataStr dataEmp))
-    putStrLn (formata "Data de Emprestimo:" (dataStr dataEmp))
+    putStrLn (formata "Data de Devolucao:" (dataStr dataDev))
     putStrLn "Livros:"
     mapM_ imprimir livros
 

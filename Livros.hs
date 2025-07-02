@@ -1,4 +1,4 @@
-module Livros where
+module Livros (Livro(..), showmenu, cadastrar, imprimir) where
 import System.IO
 import Dados
 import Util
@@ -14,7 +14,23 @@ instance Dado Livro where
     putStrLn (formata "Titulo" t)
     putStrLn (formata "Edicao" (show e))
 
-  cadastrar livro = do 
+  cadastrar _ = do 
+    putStrLn "Digite o registro do Livro: "
+    reg <- readLn
+    putStrLn "Digite o titulo do Livro: "
+    titulo <- getLine
+    putStrLn "Digite a edicao do Livro: "
+    ed <- readLn
+
+    let livro = (Livro (Registro reg) (Titulo titulo) (Edicao ed))
     arq <- openFile "Livro.txt" AppendMode
     hPutStrLn arq (show livro)
     hClose arq
+    putStrLn "Livro cadastrado com sucesso!"
+    return livro
+
+  showmenu _ = do
+    putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"
+    readLn
+
+  

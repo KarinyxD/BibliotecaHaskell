@@ -1,21 +1,31 @@
+{-# LANGUAGE AllowAmbiguousTypes #-}
 module Dados where
 import System.IO
--- Questão 02 [1,0]. Crie no módulo Dados um Tipo Abstrato de Dados (TAD) Set para armazenar
--- valores de tipos pertencentes a classe Dado. Set (conjunto) é um TAD semelhante a uma lista,
--- porém não permite valores repetidos. Ele deve ter funções que permitem inserir, remover e buscar
--- um dado e verificar se está vazio.
+-- Questão 06 [1,0]. Insira na classe Dado a definição da função obter e implemente uma versão
+-- para Aluno, Livro e Empréstimo nos respectivos módulos. Essa função retorna um TAD Set
+-- (Conjunto) contendo, respectivamente, todos os alunos, livros ou empréstimos do arquivo.
 
---Insira na classe Dado a definição da função imprimir e implemente uma versão
---para Aluno, Livro e Empréstimo nos respectivos módulos.
---Essa função recebe um valor de um tipo pertencente à classe Dado e 
--- imprime na tela todos os dados desse valor. Repare que a função já faz a impressão na tela 
--- ao invés de retornar um String. A impressão dos atributos e valores dos dados devem estar formatados 
--- com base na função formata.
+-- Questão 07 [1,0]. Insira na classe Dado a definição da função buscar e implemente uma versão
+-- para Aluno, Livro e Empréstimo nos respectivos módulos. Essa função recebe um inteiro, que
+-- corresponde ao código, registro ou número, e retorna o dado correspondente a partir da TAD Set
+-- carregado do arquivo. Note que a função pode não encontrar o dado com o inteiro informado e
+-- retornar Nothing.
+
+-- Questão 08 [1,0]. Insira na classe Dado a definição da função apagar e implemente uma versão
+-- para Aluno, Livro e Empréstimo nos respectivos módulos. Essa função recebe um inteiro, que
+-- corresponde ao código, registro ou número, remove dado correspondente do TAD Set carregado
+-- do arquivo e atualiza esse arquivo. Um aluno ou livro não pode ser apagado se houver um
+-- empréstimo cadastrado com ele.
+
+-- Questão 09 [1,0]. Insira na classe Dado a definição da função showmenu e implemente uma
+-- versão para Aluno, Livro e Empréstimo nos respectivos módulos. Essa função imprime na tela um
+-- menu com as opções voltar, visualizar, cadastrar e apagar e solicita que o usuário digite uma
+-- opção, retornando o valor digitado.
 
 class Dado a where
   imprimir :: a -> IO ()
-  cadastrar :: a -> IO ()
-
+  cadastrar :: a -> IO a
+  showmenu :: a -> IO Int
 
 data Set t = S [t] deriving (Eq, Show)
 

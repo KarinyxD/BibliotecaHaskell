@@ -1,0 +1,1 @@
+Emprestimo (Numero 999) (Aluno (Codigo 1) (Nome "Maria") (Email "maria@email.com")) (Data {dia = 1, mes = 7, ano = 2025}) (Data {dia = 15, mes = 7, ano = 2025}) [Livro (Registro 101) (Titulo "Haskell B\225sico") (Edicao 1),Livro (Registro 102) (Titulo "Aprenda FP") (Edicao 2)]

@@ -1,7 +1,7 @@
 -- modulo para implementar funcoes auxiliares de outros modulos
 module Util where
 
-data Data = Data {dia :: Int, mes :: Int, ano :: Int} deriving (Eq, Show)
+data Data = Data {dia :: Int, mes :: Int, ano :: Int} deriving (Eq, Show, Read)
 
 dataStr :: Data -> String
 dataStr (Data d m a) = print d ++ "/" ++ print m ++ "/" ++ print a

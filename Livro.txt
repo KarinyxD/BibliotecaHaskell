@@ -1,0 +1,2 @@
+Livro (Registro 101) (Titulo "Haskell B\225sico") (Edicao 1)
+Livro (Registro 102) (Titulo "Aprenda FP") (Edicao 2)

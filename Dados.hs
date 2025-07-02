@@ -1,4 +1,5 @@
 module Dados where
+import System.IO
 -- Questão 02 [1,0]. Crie no módulo Dados um Tipo Abstrato de Dados (TAD) Set para armazenar
 -- valores de tipos pertencentes a classe Dado. Set (conjunto) é um TAD semelhante a uma lista,
 -- porém não permite valores repetidos. Ele deve ter funções que permitem inserir, remover e buscar
@@ -13,9 +14,10 @@ module Dados where
 
 class Dado a where
   imprimir :: a -> IO ()
+  cadastrar :: a -> IO ()
 
 
-data Set t = S [t] deriving (Eq) 
+data Set t = S [t] deriving (Eq, Show)
 
 inserir :: (Dado t, Eq t) => t -> Set t -> Set t
 remover :: (Dado t, Eq t) => t -> Set t -> Set t

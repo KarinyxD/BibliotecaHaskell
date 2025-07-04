@@ -19,10 +19,16 @@ instance Dado Emprestimo where
   cadastrar _ = do 
     putStrLn "Digite o numero do Emprestimo: "
     -- num <- readLn
+    putStrLn "Digite o codigo do Aluno para o Emprestimo: "
+    --cod <- readLn
     putStrLn "Digite a data do Emprestimo: "
     dataEmp <- getLine
     putStrLn "Digite a data de devolucao do Emprestimo: "
     dataDev <- getLine
+    putStrLn "Digite a quantidade de livros para o Emprestimo: "
+    --qtd <- readLn
+    putStrLn "Digite o registro do livro para o Emprestimo: "
+    -- reg <- readLn
 
     -- let emprestimo = (Emprestimo (Numero num) (undefined :: Aluno) (Data dataEmp) (Data dataDev) (undefined :: Livro))
     arq <- openFile "Emprestimo.txt" AppendMode

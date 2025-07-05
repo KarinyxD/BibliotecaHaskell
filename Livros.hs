@@ -2,6 +2,7 @@ module Livros (Livro(..), showmenu, cadastrar, imprimir, obter, buscar, apagar) 
 import System.IO
 import Dados
 import Util
+import Distribution.Compat.Prelude (undefined)
 
 data Livro = Livro Registro Titulo Edicao deriving (Show, Read, Eq)
 data Registro = Registro Int deriving (Show, Read, Eq)
@@ -33,7 +34,7 @@ instance Dado Livro where
     putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"
     readLn
 
-  obter = do
+  obter _ = do
     arq <- openFile "Livro.txt" ReadMode
     let loop list = do
           eof <- hIsEOF arq
@@ -47,7 +48,7 @@ instance Dado Livro where
     return listaLivros
 
   buscar registro = do 
-    S livros <- obter 
+    S livros <- obter (undefined :: Livro)
     return (buscarCodigo registro livros)
     where
       getRegistro (Livro (Registro reg) _ _) = reg
@@ -61,7 +62,7 @@ instance Dado Livro where
     case livroEncontrado of
       Nothing -> error "Registro de livro não encontrado."
       Just livro -> do
-        S livros <- obter
+        S livros <- obter (undefined :: Livro)
         let S livroRemovido = remover livro (S livros)
         arq <- openFile "Livro.txt" WriteMode
         salvaLivros arq livroRemovido

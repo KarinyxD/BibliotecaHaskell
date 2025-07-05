@@ -17,7 +17,7 @@ class Dado a where
   imprimir :: a -> IO ()
   cadastrar :: a -> IO () 
   showmenu :: a -> IO Int
-  obter :: IO (Set a)
+  obter :: a -> IO (Set a)
   buscar :: Int -> IO (Maybe a)
   apagar :: Int -> a -> IO a
 

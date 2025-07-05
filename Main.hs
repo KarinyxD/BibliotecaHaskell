@@ -2,8 +2,8 @@ module Main where
 import Alunos
 import Livros
 import Emprestimo
+import Dados
 import Util
-import Distribution.Compat.Prelude (undefined)
 -- Questão 10 [1,0]. Crie o módulo Main e implemente nele a função main, em que o usuário pode
 -- escolher entre sair ou entrar nos menus de aluno, livro e empréstimo. Em cada um desses menus
 -- ele pode voltar ao menu principal, visualizar, cadastrar ou apagar os dados de um aluno, livro ou
@@ -19,11 +19,21 @@ main = do
             putStrLn "Digite 1-Aluno 2-Livro 3-Emprestimo 4-Voltar"
             m <- readLn 
             case m of
+              -- Aluno
               1 -> do 
                 x <- Alunos.showmenu (undefined :: Aluno)
                 case x of
                   1 -> do 
                     loop
+                  2 -> do
+                    S alunos <- Alunos.obter (undefined :: Aluno)
+                    imprimirAlunos alunos
+                    loop
+                      where 
+                        imprimirAlunos [] = return ()
+                        imprimirAlunos (a:as) = do
+                          imprimir a 
+                          imprimirAlunos as
                   3 -> do 
                     Alunos.cadastrar (undefined :: Aluno)
                     loop 
@@ -37,11 +47,21 @@ main = do
                   _ -> do 
                     putStrLn "Opcao invalida"
                     loop
+              -- Livro
               2 -> do
                 x <- Livros.showmenu (undefined :: Livro)
                 case x of
                   1 -> do 
                     loop
+                  2 -> do
+                    S livros <- Livros.obter (undefined :: Livro)
+                    imprimirLivros livros
+                    loop
+                      where 
+                        imprimirLivros [] = return ()
+                        imprimirLivros (l:ls) = do
+                          imprimir l
+                          imprimirLivros ls
                   3 -> do 
                     Livros.cadastrar (undefined :: Livro)
                     loop                  
@@ -55,11 +75,21 @@ main = do
                   _ -> do 
                     putStrLn "Opcao invalida"
                     loop
+              -- Emprestimo
               3 -> do
                 x <- Emprestimo.showmenu (undefined :: Emprestimo)
                 case x of
                   1 -> do 
                     loop
+                  2 -> do
+                    S emprestimos <- Emprestimo.obter (undefined :: Emprestimo)
+                    imprimirEmprestimos emprestimos
+                    loop
+                      where 
+                        imprimirEmprestimos [] = return ()
+                        imprimirEmprestimos (e:es) = do
+                          imprimir e
+                          imprimirEmprestimos es
                   3 -> do 
                     Emprestimo.cadastrar (undefined :: Emprestimo)
                     loop
@@ -73,6 +103,7 @@ main = do
                   _ -> do 
                     putStrLn "Opcao invalida"
                     loop
+              -- Voltar
               4 -> loop
               _ -> do
                 putStrLn "Opcao invalida" 

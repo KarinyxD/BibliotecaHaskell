@@ -3,6 +3,7 @@ import System.IO
 import Dados
 import Util
 import Dados 
+import Distribution.Compat.Prelude (undefined)
 --Insira na classe Dado a definição da função imprimir e implemente uma versão
 --para Aluno, Livro e Empréstimo nos respectivos módulos.
 --Essa função recebe um valor de um tipo pertencente à classe Dado e 
@@ -48,7 +49,7 @@ instance Dado Aluno where
     putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"
     readLn
 
-  obter = do
+  obter _ = do
     arq <- openFile "Aluno.txt" ReadMode
     let loop list = do
           eof <- hIsEOF arq
@@ -63,7 +64,7 @@ instance Dado Aluno where
 -- s <- (obter :: IO (Set Aluno)
 
   buscar codigo = do 
-    S alunos <- obter 
+    S alunos <- obter (undefined :: Aluno) 
     return (buscarCodigo codigo alunos)
     where
       getCodigo (Aluno (Codigo x) _ _) = x
@@ -77,7 +78,7 @@ instance Dado Aluno where
     case alunoEncontrado of
       Nothing -> error "Código de aluno não encontrado."
       Just aluno -> do
-        S alunos <- obter
+        S alunos <- obter (undefined :: Aluno)
         let S alunoRemovido = remover aluno (S alunos)
         arq <- openFile "Aluno.txt" WriteMode
         salvaAlunos arq alunoRemovido

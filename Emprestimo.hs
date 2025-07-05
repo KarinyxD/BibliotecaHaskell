@@ -4,6 +4,7 @@ import Alunos
 import Dados
 import Util
 import Livros
+import Distribution.Compat.Prelude (undefined)
 
 data Emprestimo = Emprestimo Numero Aluno Data Data [Livro] deriving (Show, Read, Eq)
 data Numero = Numero Int deriving (Show, Read, Eq)
@@ -46,7 +47,7 @@ instance Dado Emprestimo where
     putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"
     readLn
 
-  obter = do
+  obter _ = do
     arq <- openFile "Emprestimo.txt" ReadMode
     let loop list = do
           eof <- hIsEOF arq
@@ -60,7 +61,7 @@ instance Dado Emprestimo where
     return listaEmprestimos
 
   buscar numero = do 
-    S emprestimos <- obter 
+    S emprestimos <- obter (undefined :: Emprestimo) 
     return (buscarNumero numero emprestimos)
     where
       getNumero (Emprestimo (Numero n) _ _ _ _) = n
@@ -74,7 +75,7 @@ instance Dado Emprestimo where
     case emprestimoEncontrado of
       Nothing -> error "Número de emprestimo não encontrado."
       Just emprestimo -> do
-        S emprestimos <- obter
+        S emprestimos <- obter (undefined :: Emprestimo)
         let S emprestimoRemovido = remover emprestimo (S emprestimos)
         arq <- openFile "Emprestimo.txt" WriteMode
         salvaEmprestimos arq emprestimoRemovido

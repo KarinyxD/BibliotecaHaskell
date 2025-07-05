@@ -29,22 +29,47 @@ instance Dado Emprestimo where
       Just _ -> putStrLn "Já existe um emprestimo com esse número! Cadastro cancelado."
       Nothing -> do
         putStrLn "Digite o codigo do Aluno para o Emprestimo: "
-        --cod <- readLn
-        putStrLn "Digite a data do Emprestimo: "
-        dataEmp <- getLine
-        putStrLn "Digite a data de devolucao do Emprestimo: "
-        dataDev <- getLine
-        putStrLn "Digite a quantidade de livros para o Emprestimo: "
-        --qtd <- readLn
-        putStrLn "Digite o registro do livro para o Emprestimo: "
-        -- reg <- readLn
+        cod <- readLn
+        alunoEncontrado <- Alunos.buscar cod (undefined :: Aluno)
+        case alunoEncontrado of
+          Nothing -> putStrLn "Aluno não encontrado!"
+          Just aluno -> do
+            putStrLn "Digite o dia do Emprestimo: " 
+            diaEmp <- readLn
+            putStrLn "Digite o mes do Emprestimo: " 
+            mesEmp <- readLn
+            putStrLn "Digite o ano do Emprestimo: " 
+            anoEmp <- readLn
+            let dataEmp = Data diaEmp mesEmp anoEmp
 
-        -- let emprestimo = (Emprestimo (Numero num) (undefined :: Aluno) (Data dataEmp) (Data dataDev) (undefined :: Livro))
-        arq <- openFile "Emprestimo.txt" AppendMode
-        -- hPutStrLn arq (show emprestimo)
-        hClose arq
-        putStrLn "Emprestimo cadastrado com sucesso!"
-        -- imprimir emprestimo
+            putStrLn "Digite o dia da Devolucao do Emprestimo: " 
+            diaDev <- readLn
+            putStrLn "Digite o mes da Devolucao do Emprestimo: " 
+            mesDev <- readLn
+            putStrLn "Digite o ano da Devolucao do Emprestimo: " 
+            anoDev <- readLn
+            let dataDev = Data diaDev mesDev anoDev
+
+            putStrLn "Digite a quantidade de livros para o Emprestimo: "
+            qtd <- readLn
+            livrosEmprestimo <- loop [] qtd
+            let emprestimo = (Emprestimo (Numero num) (aluno) (dataEmp) (dataDev) (livrosEmprestimo))
+            arq <- openFile "Emprestimo.txt" AppendMode
+            hPutStrLn arq (show emprestimo)
+            hClose arq
+            putStrLn "Emprestimo cadastrado com sucesso!"
+            imprimir emprestimo
+            where 
+              loop xs 0 = return xs
+              loop xs n = do
+                putStrLn ("Digite o registro do livro " ++ show n ++ " para o Emprestimo: ")
+                reg <- readLn
+                livroEncontrado <- Livros.buscar reg (undefined :: Livro)
+                case livroEncontrado of
+                  Nothing -> do 
+                    putStrLn "Livro não encontrado!"
+                    loop xs n
+                  Just livro -> loop (livro : xs) (n-1)
 
   showmenu _ = do
     putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"

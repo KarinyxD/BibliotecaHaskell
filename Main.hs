@@ -5,8 +5,7 @@ import Emprestimo
 import Dados
 import Util
 
--- Falta arrumar o cadastrar do emprestimo, pra ele receber um Aluno e uma lista de Livros.
--- Falta impendir que o usuario consiga deletar um aluno ou um livro que esteja linkado a algum emprestimo.
+-- Falta impedir que o usuario consiga deletar um aluno ou um livro que esteja linkado a algum emprestimo.
 
 main = do
   let loop = do

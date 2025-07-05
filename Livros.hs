@@ -1,12 +1,12 @@
-module Livros (Livro(..), showmenu, cadastrar, imprimir) where
+module Livros (Livro(..), showmenu, cadastrar, imprimir, obter, buscar, apagar) where
 import System.IO
 import Dados
 import Util
 
-data Livro = Livro Registro Titulo Edicao deriving (Show, Read)
-data Registro = Registro Int deriving (Show, Read)
-data Titulo = Titulo String deriving (Show, Read)
-data Edicao = Edicao Int deriving (Show, Read)
+data Livro = Livro Registro Titulo Edicao deriving (Show, Read, Eq)
+data Registro = Registro Int deriving (Show, Read, Eq)
+data Titulo = Titulo String deriving (Show, Read, Eq)
+data Edicao = Edicao Int deriving (Show, Read, Eq)
 
 instance Dado Livro where
   imprimir (Livro (Registro x) (Titulo t) (Edicao e)) = do 
@@ -27,10 +27,49 @@ instance Dado Livro where
     hPutStrLn arq (show livro)
     hClose arq
     putStrLn "Livro cadastrado com sucesso!"
-    return livro
+    imprimir livro
 
   showmenu _ = do
     putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"
     readLn
 
+  obter = do
+    arq <- openFile "Livro.txt" ReadMode
+    let loop list = do
+          eof <- hIsEOF arq
+          if eof then return list
+          else do
+            linharq <- hGetLine arq
+            let livro = read linharq :: Livro
+            loop (inserir livro list)
+    listaLivros <- loop (S [])
+    hClose arq
+    return listaLivros
+
+  buscar registro = do 
+    S livros <- obter 
+    return (buscarCodigo registro livros)
+    where
+      getRegistro (Livro (Registro reg) _ _) = reg
+      buscarCodigo _ [] = Nothing
+      buscarCodigo registro (l:ls)
+        | (getRegistro l) == registro = Just l
+        | otherwise = buscarCodigo registro ls
+
+  apagar registro _ = do 
+    livroEncontrado <- buscar registro
+    case livroEncontrado of
+      Nothing -> error "Registro de livro não encontrado."
+      Just livro -> do
+        S livros <- obter
+        let S livroRemovido = remover livro (S livros)
+        arq <- openFile "Livro.txt" WriteMode
+        salvaLivros arq livroRemovido
+        hClose arq
+        return livro
+        where
+          salvaLivros _ [] = return ()
+          salvaLivros arq (l:ls) = do
+            hPutStrLn arq (show l)
+            salvaLivros arq ls
   

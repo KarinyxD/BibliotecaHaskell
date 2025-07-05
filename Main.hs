@@ -3,6 +3,7 @@ import Alunos
 import Livros
 import Emprestimo
 import Util
+import Distribution.Compat.Prelude (undefined)
 -- Questão 10 [1,0]. Crie o módulo Main e implemente nele a função main, em que o usuário pode
 -- escolher entre sair ou entrar nos menus de aluno, livro e empréstimo. Em cada um desses menus
 -- ele pode voltar ao menu principal, visualizar, cadastrar ou apagar os dados de um aluno, livro ou
@@ -26,6 +27,13 @@ main = do
                   3 -> do 
                     Alunos.cadastrar (undefined :: Aluno)
                     loop 
+                  4 -> do
+                    putStrLn "Digite o codigo do aluno que deseja apagar: "
+                    codigo <- readLn 
+                    alunoRemovido <- Alunos.apagar codigo (undefined :: Aluno)
+                    putStrLn "Aluno removido com sucesso: "
+                    imprimir alunoRemovido
+                    loop
                   _ -> do 
                     putStrLn "Opcao invalida"
                     loop
@@ -36,6 +44,13 @@ main = do
                     loop
                   3 -> do 
                     Livros.cadastrar (undefined :: Livro)
+                    loop                  
+                  4 -> do
+                    putStrLn "Digite o registro do livro que deseja apagar: "
+                    registro <- readLn 
+                    livroRemovido <- Livros.apagar registro (undefined :: Livro)
+                    putStrLn "Livro removido com sucesso: "
+                    imprimir livroRemovido
                     loop 
                   _ -> do 
                     putStrLn "Opcao invalida"
@@ -47,6 +62,13 @@ main = do
                     loop
                   3 -> do 
                     Emprestimo.cadastrar (undefined :: Emprestimo)
+                    loop
+                  4 -> do
+                    putStrLn "Digite o número do emprestimo que deseja apagar: "
+                    numero <- readLn 
+                    emprestimoRemovido <- Emprestimo.apagar numero (undefined :: Emprestimo)
+                    putStrLn "Emprestimo removido com sucesso: "
+                    imprimir emprestimoRemovido
                     loop 
                   _ -> do 
                     putStrLn "Opcao invalida"

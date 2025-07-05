@@ -1,12 +1,12 @@
-module Emprestimo(Emprestimo(..), showmenu, cadastrar, imprimir) where
+module Emprestimo(Emprestimo(..), showmenu, cadastrar, imprimir, obter, buscar, apagar) where
 import System.IO
 import Alunos
 import Dados
 import Util
 import Livros
 
-data Emprestimo = Emprestimo Numero Aluno Data Data [Livro] deriving (Show, Read)
-data Numero = Numero Int deriving (Show, Read)
+data Emprestimo = Emprestimo Numero Aluno Data Data [Livro] deriving (Show, Read, Eq)
+data Numero = Numero Int deriving (Show, Read, Eq)
 
 instance Dado Emprestimo where
   imprimir (Emprestimo (Numero x) aluno dataEmp dataDev livros) = do 
@@ -14,8 +14,13 @@ instance Dado Emprestimo where
     imprimir aluno
     putStrLn (formata "Data de Emprestimo:" (dataStr dataEmp))
     putStrLn (formata "Data de Devolucao:" (dataStr dataDev))
-    mapM_ imprimir livros
-  
+    imprimeLivros livros 
+      where
+        imprimeLivros [] = return ()
+        imprimeLivros (l:ls) = do
+          imprimir l
+          imprimeLivros ls
+
   cadastrar _ = do 
     putStrLn "Digite o numero do Emprestimo: "
     -- num <- readLn
@@ -35,10 +40,48 @@ instance Dado Emprestimo where
     -- hPutStrLn arq (show emprestimo)
     hClose arq
     putStrLn "Emprestimo cadastrado com sucesso!"
-    return (undefined :: Emprestimo)
+    -- imprimir emprestimo
 
   showmenu _ = do
     putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"
     readLn
 
+  obter = do
+    arq <- openFile "Emprestimo.txt" ReadMode
+    let loop list = do
+          eof <- hIsEOF arq
+          if eof then return list
+          else do
+            linharq <- hGetLine arq
+            let emprestimo = read linharq :: Emprestimo
+            loop (inserir emprestimo list)
+    listaEmprestimos <- loop (S [])
+    hClose arq
+    return listaEmprestimos
 
+  buscar numero = do 
+    S emprestimos <- obter 
+    return (buscarNumero numero emprestimos)
+    where
+      getNumero (Emprestimo (Numero n) _ _ _ _) = n
+      buscarNumero _ [] = Nothing
+      buscarNumero numero (e:es)
+        | (getNumero e) == numero = Just e
+        | otherwise = buscarNumero numero es
+
+  apagar numero _ = do 
+    emprestimoEncontrado <- buscar numero
+    case emprestimoEncontrado of
+      Nothing -> error "Número de emprestimo não encontrado."
+      Just emprestimo -> do
+        S emprestimos <- obter
+        let S emprestimoRemovido = remover emprestimo (S emprestimos)
+        arq <- openFile "Emprestimo.txt" WriteMode
+        salvaEmprestimos arq emprestimoRemovido
+        hClose arq
+        return emprestimo
+        where
+          salvaEmprestimos _ [] = return ()
+          salvaEmprestimos arq (e:es) = do
+            hPutStrLn arq (show e)
+            salvaEmprestimos arq es

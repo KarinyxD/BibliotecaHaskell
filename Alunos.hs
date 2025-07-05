@@ -1,7 +1,8 @@
-module Alunos (Aluno(..), showmenu, cadastrar, imprimir) where
+module Alunos (Aluno(..), imprimir, showmenu, cadastrar, obter, buscar, apagar) where
 import System.IO 
 import Dados
 import Util
+import Dados 
 --Insira na classe Dado a definição da função imprimir e implemente uma versão
 --para Aluno, Livro e Empréstimo nos respectivos módulos.
 --Essa função recebe um valor de um tipo pertencente à classe Dado e 
@@ -18,10 +19,10 @@ import Util
 -- menu com as opções voltar, visualizar, cadastrar e apagar e solicita que o usuário digite uma
 -- opção, retornando o valor digitado.
 
-data Aluno = Aluno Codigo Nome Email deriving (Show, Read)
-data Codigo = Codigo Int deriving (Show, Read)
-data Nome = Nome String deriving (Show, Read)
-data Email = Email String deriving (Show, Read)
+data Aluno = Aluno Codigo Nome Email deriving (Show, Read, Eq)
+data Codigo = Codigo Int deriving (Show, Read, Eq)
+data Nome = Nome String deriving (Show, Read, Eq)
+data Email = Email String deriving (Show, Read, Eq)
 
 instance Dado Aluno where
   imprimir (Aluno (Codigo x) (Nome n) (Email e)) = do 
@@ -36,14 +37,59 @@ instance Dado Aluno where
     nome <- getLine
     putStrLn "Digite o email do Aluno: "
     email <- getLine
-
     let aluno = (Aluno (Codigo cod) (Nome nome) (Email email))
     arq <- openFile "Aluno.txt" AppendMode
     hPutStrLn arq (show aluno)
     hClose arq
     putStrLn "Aluno cadastrado com sucesso!"
-    return aluno
+    imprimir aluno 
 
   showmenu _ = do
     putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"
     readLn
+
+  obter = do
+    arq <- openFile "Aluno.txt" ReadMode
+    let loop list = do
+          eof <- hIsEOF arq
+          if eof then return list
+          else do
+            linharq <- hGetLine arq
+            let aluno = read linharq :: Aluno
+            loop (inserir aluno list)
+    listaAlunos <- loop (S [])
+    hClose arq
+    return listaAlunos
+-- s <- (obter :: IO (Set Aluno)
+
+  buscar codigo = do 
+    S alunos <- obter 
+    return (buscarCodigo codigo alunos)
+    where
+      getCodigo (Aluno (Codigo x) _ _) = x
+      buscarCodigo _ [] = Nothing
+      buscarCodigo codigo (a:as)
+        | (getCodigo a) == codigo = Just a
+        | otherwise = buscarCodigo codigo as
+
+  apagar codigo _ = do 
+    alunoEncontrado <- buscar codigo
+    case alunoEncontrado of
+      Nothing -> error "Código de aluno não encontrado."
+      Just aluno -> do
+        S alunos <- obter
+        let S alunoRemovido = remover aluno (S alunos)
+        arq <- openFile "Aluno.txt" WriteMode
+        salvaAlunos arq alunoRemovido
+        hClose arq
+        return aluno
+        where
+          salvaAlunos _ [] = return ()
+          salvaAlunos arq (a:as) = do
+            hPutStrLn arq (show a)
+            salvaAlunos arq as
+
+
+-- remove dado correspondente do TAD Set carregado
+-- do arquivo e atualiza esse arquivo. Um aluno ou livro não pode ser apagado se houver um
+-- empréstimo cadastrado com ele.

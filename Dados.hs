@@ -1,18 +1,6 @@
 module Dados (Dado(..), Set(..), inserir, remover, procurar, verificar)where
 import System.IO
 
--- Questão 07 [1,0]. Insira na classe Dado a definição da função buscar e implemente uma versão
--- para Aluno, Livro e Empréstimo nos respectivos módulos. Essa função recebe um inteiro, que
--- corresponde ao código, registro ou número, e retorna o dado correspondente a partir da TAD Set
--- carregado do arquivo. Note que a função pode não encontrar o dado com o inteiro informado e
--- retornar Nothing.
-
--- Questão 08 [1,0]. Insira na classe Dado a definição da função apagar e implemente uma versão
--- para Aluno, Livro e Empréstimo nos respectivos módulos. Essa função recebe um inteiro, que
--- corresponde ao código, registro ou número, remove dado correspondente do TAD Set carregado
--- do arquivo e atualiza esse arquivo. Um aluno ou livro não pode ser apagado se houver um
--- empréstimo cadastrado com ele.
-
 class Dado a where
   imprimir :: a -> IO ()
   cadastrar :: a -> IO () 

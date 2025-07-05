@@ -4,7 +4,6 @@ import Alunos
 import Dados
 import Util
 import Livros
-import Distribution.Compat.Prelude (undefined)
 
 data Emprestimo = Emprestimo Numero Aluno Data Data [Livro] deriving (Show, Read, Eq)
 data Numero = Numero Int deriving (Show, Read, Eq)

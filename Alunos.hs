@@ -3,22 +3,6 @@ import System.IO
 import Dados
 import Util
 import Dados 
-import Distribution.Compat.Prelude (undefined)
---Insira na classe Dado a definição da função imprimir e implemente uma versão
---para Aluno, Livro e Empréstimo nos respectivos módulos.
---Essa função recebe um valor de um tipo pertencente à classe Dado e 
--- imprime na tela todos os dados desse valor. Repare que a função já faz a impressão na tela 
--- ao invés de retornar um String. A impressão dos atributos e valores dos dados devem estar formatados 
--- com base na função formata.
-
---Questão 05 [1,0]. Insira na classe Dado a definição da função cadastrar e implemente uma versão
---para Aluno, Livro e Empréstimo nos respectivos módulos. Essa função que solicita do usuário os
---dados do respectivo tipo e grava em um arquivo (cada tipo tem seu próprio arquivo)
-
--- Questão 09 [1,0]. Insira na classe Dado a definição da função showmenu e implemente uma
--- versão para Aluno, Livro e Empréstimo nos respectivos módulos. Essa função imprime na tela um
--- menu com as opções voltar, visualizar, cadastrar e apagar e solicita que o usuário digite uma
--- opção, retornando o valor digitado.
 
 data Aluno = Aluno Codigo Nome Email deriving (Show, Read, Eq)
 data Codigo = Codigo Int deriving (Show, Read, Eq)
@@ -93,8 +77,3 @@ instance Dado Aluno where
           salvaAlunos arq (a:as) = do
             hPutStrLn arq (show a)
             salvaAlunos arq as
-
-
--- remove dado correspondente do TAD Set carregado
--- do arquivo e atualiza esse arquivo. Um aluno ou livro não pode ser apagado se houver um
--- empréstimo cadastrado com ele.

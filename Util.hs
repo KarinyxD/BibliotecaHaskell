@@ -1,8 +1,5 @@
 -- modulo para implementar funcoes auxiliares de outros modulos
 module Util where
--- Questão 06 [1,0]. Insira na classe Dado a definição da função obter e implemente uma versão
--- para Aluno, Livro e Empréstimo nos respectivos módulos. Essa função retorna um TAD Set
--- (Conjunto) contendo, respectivamente, todos os alunos, livros ou empréstimos do arquivo.
 data Data = Data {dia :: Int, mes :: Int, ano :: Int} deriving (Show, Read, Eq)
 
 dataStr :: Data -> String

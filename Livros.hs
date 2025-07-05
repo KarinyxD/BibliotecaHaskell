@@ -2,7 +2,6 @@ module Livros (Livro(..), showmenu, cadastrar, imprimir, obter, buscar, apagar) 
 import System.IO
 import Dados
 import Util
-import Distribution.Compat.Prelude (undefined)
 
 data Livro = Livro Registro Titulo Edicao deriving (Show, Read, Eq)
 data Registro = Registro Int deriving (Show, Read, Eq)

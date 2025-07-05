@@ -18,7 +18,7 @@ class Dado a where
   cadastrar :: a -> IO () 
   showmenu :: a -> IO Int
   obter :: a -> IO (Set a)
-  buscar :: Int -> IO (Maybe a)
+  buscar :: Int -> a -> IO (Maybe a)
   apagar :: Int -> a -> IO a
 
 

@@ -18,17 +18,20 @@ instance Dado Livro where
   cadastrar _ = do 
     putStrLn "Digite o registro do Livro: "
     reg <- readLn
-    putStrLn "Digite o titulo do Livro: "
-    titulo <- getLine
-    putStrLn "Digite a edicao do Livro: "
-    ed <- readLn
-
-    let livro = (Livro (Registro reg) (Titulo titulo) (Edicao ed))
-    arq <- openFile "Livro.txt" AppendMode
-    hPutStrLn arq (show livro)
-    hClose arq
-    putStrLn "Livro cadastrado com sucesso!"
-    imprimir livro
+    livroExistente <- buscar reg (undefined :: Livro)
+    case livroExistente of
+      Just _ -> putStrLn "Já existe um livro com esse registro! Cadastro cancelado."
+      Nothing -> do
+        putStrLn "Digite o titulo do Livro: "
+        titulo <- getLine
+        putStrLn "Digite a edicao do Livro: "
+        ed <- readLn
+        let livro = (Livro (Registro reg) (Titulo titulo) (Edicao ed))
+        arq <- openFile "Livro.txt" AppendMode
+        hPutStrLn arq (show livro)
+        hClose arq
+        putStrLn "Livro cadastrado com sucesso!"
+        imprimir livro
 
   showmenu _ = do
     putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"
@@ -47,7 +50,7 @@ instance Dado Livro where
     hClose arq
     return listaLivros
 
-  buscar registro = do 
+  buscar registro _ = do 
     S livros <- obter (undefined :: Livro)
     return (buscarCodigo registro livros)
     where
@@ -58,7 +61,7 @@ instance Dado Livro where
         | otherwise = buscarCodigo registro ls
 
   apagar registro _ = do 
-    livroEncontrado <- buscar registro
+    livroEncontrado <- buscar registro (undefined :: Livro)
     case livroEncontrado of
       Nothing -> error "Registro de livro não encontrado."
       Just livro -> do

@@ -34,16 +34,20 @@ instance Dado Aluno where
   cadastrar _ = do 
     putStrLn "Digite o codigo do Aluno: "
     cod <- readLn
-    putStrLn "Digite o nome do Aluno: "
-    nome <- getLine
-    putStrLn "Digite o email do Aluno: "
-    email <- getLine
-    let aluno = (Aluno (Codigo cod) (Nome nome) (Email email))
-    arq <- openFile "Aluno.txt" AppendMode
-    hPutStrLn arq (show aluno)
-    hClose arq
-    putStrLn "Aluno cadastrado com sucesso!"
-    imprimir aluno 
+    alunoExistente <- buscar cod (undefined :: Aluno)
+    case alunoExistente of
+      Just _ -> putStrLn "Já existe um aluno com esse código! Cadastro cancelado."
+      Nothing -> do
+        putStrLn "Digite o nome do Aluno: "
+        nome <- getLine
+        putStrLn "Digite o email do Aluno: "
+        email <- getLine
+        let aluno = (Aluno (Codigo cod) (Nome nome) (Email email))
+        arq <- openFile "Aluno.txt" AppendMode
+        hPutStrLn arq (show aluno)
+        hClose arq
+        putStrLn "Aluno cadastrado com sucesso!"
+        imprimir aluno 
 
   showmenu _ = do
     putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"
@@ -63,7 +67,7 @@ instance Dado Aluno where
     return listaAlunos
 -- s <- (obter :: IO (Set Aluno)
 
-  buscar codigo = do 
+  buscar codigo _ = do 
     S alunos <- obter (undefined :: Aluno) 
     return (buscarCodigo codigo alunos)
     where
@@ -74,7 +78,7 @@ instance Dado Aluno where
         | otherwise = buscarCodigo codigo as
 
   apagar codigo _ = do 
-    alunoEncontrado <- buscar codigo
+    alunoEncontrado <- buscar codigo (undefined :: Aluno)
     case alunoEncontrado of
       Nothing -> error "Código de aluno não encontrado."
       Just aluno -> do

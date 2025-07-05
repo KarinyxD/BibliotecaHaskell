@@ -24,24 +24,28 @@ instance Dado Emprestimo where
 
   cadastrar _ = do 
     putStrLn "Digite o numero do Emprestimo: "
-    -- num <- readLn
-    putStrLn "Digite o codigo do Aluno para o Emprestimo: "
-    --cod <- readLn
-    putStrLn "Digite a data do Emprestimo: "
-    dataEmp <- getLine
-    putStrLn "Digite a data de devolucao do Emprestimo: "
-    dataDev <- getLine
-    putStrLn "Digite a quantidade de livros para o Emprestimo: "
-    --qtd <- readLn
-    putStrLn "Digite o registro do livro para o Emprestimo: "
-    -- reg <- readLn
+    num <- readLn
+    emprestimoExistente <- buscar num (undefined :: Emprestimo)
+    case emprestimoExistente of
+      Just _ -> putStrLn "Já existe um emprestimo com esse número! Cadastro cancelado."
+      Nothing -> do
+        putStrLn "Digite o codigo do Aluno para o Emprestimo: "
+        --cod <- readLn
+        putStrLn "Digite a data do Emprestimo: "
+        dataEmp <- getLine
+        putStrLn "Digite a data de devolucao do Emprestimo: "
+        dataDev <- getLine
+        putStrLn "Digite a quantidade de livros para o Emprestimo: "
+        --qtd <- readLn
+        putStrLn "Digite o registro do livro para o Emprestimo: "
+        -- reg <- readLn
 
-    -- let emprestimo = (Emprestimo (Numero num) (undefined :: Aluno) (Data dataEmp) (Data dataDev) (undefined :: Livro))
-    arq <- openFile "Emprestimo.txt" AppendMode
-    -- hPutStrLn arq (show emprestimo)
-    hClose arq
-    putStrLn "Emprestimo cadastrado com sucesso!"
-    -- imprimir emprestimo
+        -- let emprestimo = (Emprestimo (Numero num) (undefined :: Aluno) (Data dataEmp) (Data dataDev) (undefined :: Livro))
+        arq <- openFile "Emprestimo.txt" AppendMode
+        -- hPutStrLn arq (show emprestimo)
+        hClose arq
+        putStrLn "Emprestimo cadastrado com sucesso!"
+        -- imprimir emprestimo
 
   showmenu _ = do
     putStrLn "Digite 1-Voltar 2-Visualizar 3-Cadastrar 4-Apagar"
@@ -60,7 +64,7 @@ instance Dado Emprestimo where
     hClose arq
     return listaEmprestimos
 
-  buscar numero = do 
+  buscar numero _ = do 
     S emprestimos <- obter (undefined :: Emprestimo) 
     return (buscarNumero numero emprestimos)
     where
@@ -71,7 +75,7 @@ instance Dado Emprestimo where
         | otherwise = buscarNumero numero es
 
   apagar numero _ = do 
-    emprestimoEncontrado <- buscar numero
+    emprestimoEncontrado <- buscar numero (undefined :: Emprestimo)
     case emprestimoEncontrado of
       Nothing -> error "Número de emprestimo não encontrado."
       Just emprestimo -> do

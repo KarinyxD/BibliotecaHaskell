@@ -5,8 +5,6 @@ import Emprestimo
 import Dados
 import Util
 
--- Falta impedir que o usuario consiga deletar um aluno ou um livro que esteja linkado a algum emprestimo.
-
 main = do
   let loop = do
         putStrLn "Digite 1 se deseja Sair ou 2 se deseja entrar nos menus."

@@ -64,12 +64,16 @@ instance Dado Livro where
     case livroEncontrado of
       Nothing -> error "Registro de livro não encontrado."
       Just livro -> do
-        S livros <- obter (undefined :: Livro)
-        let S livroRemovido = remover livro (S livros)
-        arq <- openFile "Livro.txt" WriteMode
-        salvaLivros arq livroRemovido
-        hClose arq
-        return livro
+        temEmprestimo <- livroEmEmprestimo registro 
+        if temEmprestimo 
+          then error $ "Nao é possivel remover o livro com registro " ++ show registro ++ ", pois ele está em um emprestimo."
+          else do
+            S livros <- obter (undefined :: Livro)
+            let S livroRemovido = remover livro (S livros)
+            arq <- openFile "Livro.txt" WriteMode
+            salvaLivros arq livroRemovido
+            hClose arq
+            return livro
         where
           salvaLivros _ [] = return ()
           salvaLivros arq (l:ls) = do

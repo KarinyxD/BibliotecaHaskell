@@ -59,10 +59,11 @@ instance Dado Emprestimo where
             hClose arq
             putStrLn "Emprestimo cadastrado com sucesso!"
             imprimir emprestimo
+            
             where 
               loop xs 0 = return xs
               loop xs n = do
-                putStrLn ("Digite o registro do livro " ++ show n ++ " para o Emprestimo: ")
+                putStrLn ("Digite o registro do livro para o Emprestimo: ")
                 reg <- readLn
                 livroEncontrado <- Livros.buscar reg (undefined :: Livro)
                 case livroEncontrado of

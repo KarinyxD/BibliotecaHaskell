@@ -2,7 +2,6 @@ module Alunos (Aluno(..), imprimir, showmenu, cadastrar, obter, buscar, apagar) 
 import System.IO 
 import Dados
 import Util
-import Dados 
 
 data Aluno = Aluno Codigo Nome Email deriving (Show, Read, Eq)
 data Codigo = Codigo Int deriving (Show, Read, Eq)
@@ -66,14 +65,19 @@ instance Dado Aluno where
     case alunoEncontrado of
       Nothing -> error "Código de aluno não encontrado."
       Just aluno -> do
-        S alunos <- obter (undefined :: Aluno)
-        let S alunoRemovido = remover aluno (S alunos)
-        arq <- openFile "Aluno.txt" WriteMode
-        salvaAlunos arq alunoRemovido
-        hClose arq
-        return aluno
-        where
-          salvaAlunos _ [] = return ()
-          salvaAlunos arq (a:as) = do
-            hPutStrLn arq (show a)
-            salvaAlunos arq as
+        temEmprestimo <- alunoEmEmprestimo codigo
+        if temEmprestimo
+          then error $ "Nao é possível remover o aluno com codigo " ++ show codigo ++ ", pois ele tem um emprestimo."
+        else do
+          S alunos <- obter (undefined :: Aluno)
+          let S alunoRemovido = remover aluno (S alunos)
+          arq <- openFile "Aluno.txt" WriteMode
+          salvaAlunos arq alunoRemovido
+          hClose arq
+          return aluno
+
+    where
+      salvaAlunos _ [] = return ()
+      salvaAlunos arq (a:as) = do
+        hPutStrLn arq (show a)
+        salvaAlunos arq as

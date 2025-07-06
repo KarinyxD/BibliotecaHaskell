@@ -1,5 +1,6 @@
 -- modulo para implementar funcoes auxiliares de outros modulos
 module Util where
+import Dados
 import System.IO
 data Data = Data {dia :: Int, mes :: Int, ano :: Int} deriving (Show, Read, Eq)
 
@@ -53,3 +54,17 @@ buscaId _ [] = False
 buscaId sub xs
   | take (length sub) xs == sub = True
   | otherwise = buscaId sub (tail xs)
+
+imprimirLista :: Dado a => [a] -> IO ()
+imprimirLista [] = return ()
+imprimirLista (a:as) = do
+  imprimir a
+  imprimirLista as
+
+salvaArquivo :: Show a => Handle -> [a] -> IO ()
+salvaArquivo arq [] = return ()
+salvaArquivo arq (e:es) = do
+  hPutStrLn arq (show e)
+  salvaArquivo arq es
+
+

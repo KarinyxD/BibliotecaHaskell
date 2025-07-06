@@ -107,11 +107,6 @@ instance Dado Emprestimo where
         S emprestimos <- obter (undefined :: Emprestimo)
         let S emprestimoRemovido = remover emprestimo (S emprestimos)
         arq <- openFile "Emprestimo.txt" WriteMode
-        salvaEmprestimos arq emprestimoRemovido
+        salvaArquivo arq emprestimoRemovido
         hClose arq
         return emprestimo
-        where
-          salvaEmprestimos _ [] = return ()
-          salvaEmprestimos arq (e:es) = do
-            hPutStrLn arq (show e)
-            salvaEmprestimos arq es

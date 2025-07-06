@@ -11,98 +11,84 @@ main = do
         opcao <- readLn
         case opcao of 
           1 -> return ()
-          2 -> let loop2 = do     
-                    putStrLn "Digite 1-Aluno 2-Livro 3-Emprestimo 4-Voltar"
-                    m <- readLn 
-                    case m of
-                      -- Aluno
-                      1 -> do 
-                        x <- Alunos.showmenu (undefined :: Aluno)
-                        case x of
-                          1 -> loop2
-                          2 -> do
-                            S alunos <- Alunos.obter (undefined :: Aluno)
-                            imprimirAlunos alunos
-                            loop
-                            where 
-                              imprimirAlunos [] = return ()
-                              imprimirAlunos (a:as) = do
-                                imprimir a 
-                                imprimirAlunos as
-                          3 -> do 
-                            Alunos.cadastrar (undefined :: Aluno)
-                            loop 
-                          4 -> do
-                            putStrLn "Digite o codigo do aluno que deseja apagar: "
-                            codigo <- readLn 
-                            alunoRemovido <- Alunos.apagar codigo (undefined :: Aluno)
-                            putStrLn "Aluno removido com sucesso: "
-                            imprimir alunoRemovido
-                            loop
-                          _ -> do 
-                            putStrLn "Opcao invalida"
-                            loop
-                      -- Livro
-                      2 -> do
-                        x <- Livros.showmenu (undefined :: Livro)
-                        case x of
-                          1 -> loop2
-                          2 -> do
-                            S livros <- Livros.obter (undefined :: Livro)
-                            imprimirLivros livros
-                            loop
-                            where 
-                              imprimirLivros [] = return ()
-                              imprimirLivros (l:ls) = do
-                                imprimir l
-                                imprimirLivros ls
-                          3 -> do 
-                            Livros.cadastrar (undefined :: Livro)
-                            loop                  
-                          4 -> do
-                            putStrLn "Digite o registro do livro que deseja apagar: "
-                            registro <- readLn 
-                            livroRemovido <- Livros.apagar registro (undefined :: Livro)
-                            putStrLn "Livro removido com sucesso: "
-                            imprimir livroRemovido
-                            loop 
-                          _ -> do 
-                            putStrLn "Opcao invalida"
-                            loop
-                      -- Emprestimo
-                      3 -> do
-                        x <- Emprestimo.showmenu (undefined :: Emprestimo)
-                        case x of
-                          1 -> loop2
-                          2 -> do
-                            S emprestimos <- Emprestimo.obter (undefined :: Emprestimo)
-                            imprimirEmprestimos emprestimos
-                            loop
-                            where 
-                              imprimirEmprestimos [] = return ()
-                              imprimirEmprestimos (e:es) = do
-                                imprimir e
-                                imprimirEmprestimos es
-                          3 -> do 
-                            Emprestimo.cadastrar (undefined :: Emprestimo)
-                            loop
-                          4 -> do
-                            putStrLn "Digite o número do emprestimo que deseja apagar: "
-                            numero <- readLn 
-                            emprestimoRemovido <- Emprestimo.apagar numero (undefined :: Emprestimo)
-                            putStrLn "Emprestimo removido com sucesso: "
-                            imprimir emprestimoRemovido
-                            loop 
-                          _ -> do 
-                            putStrLn "Opcao invalida"
-                            loop
-                      -- Voltar
-                      4 -> loop
-                      _ -> do
-                        putStrLn "Opcao invalida" 
-                        loop2
-              in loop2
-          _ -> do 
-            putStrLn "Opçao invalida"
+          2 -> do
+            menuPrincipal
+            loop
+          _ -> do
+            putStrLn "Opção inválida"
             loop
   loop
+
+menuPrincipal :: IO ()
+menuPrincipal = do
+  putStrLn "Digite 1-Aluno 2-Livro 3-Emprestimo 4-Voltar"
+  m <- readLn
+  case m of
+    1 -> do
+      menuAluno
+      menuPrincipal
+    2 -> do
+      menuLivro
+      menuPrincipal
+    3 -> do
+      menuEmprestimo
+      menuPrincipal
+    4 -> return ()
+    _ -> do
+      putStrLn "Opção inválida"
+      menuPrincipal
+
+menuAluno :: IO ()
+menuAluno = do
+  x <- Alunos.showmenu (undefined :: Aluno)
+  case x of
+    1 -> return ()
+    2 -> do
+      S alunos <- Alunos.obter (undefined :: Aluno)
+      imprimirLista alunos
+    3 -> do
+      Alunos.cadastrar (undefined :: Aluno)
+    4 -> do
+      putStrLn "Digite o código do aluno que deseja apagar: "
+      codigo <- readLn
+      alunoRemovido <- Alunos.apagar codigo (undefined :: Aluno)
+      putStrLn "Aluno removido com sucesso:"
+      imprimir alunoRemovido
+    _ -> putStrLn "Opção inválida"
+
+menuLivro :: IO ()
+menuLivro = do
+  x <- Livros.showmenu (undefined :: Livro)
+  case x of
+    1 -> return ()
+    2 -> do
+      S livros <- Livros.obter (undefined :: Livro)
+      imprimirLista livros
+    3 -> do
+      Livros.cadastrar (undefined :: Livro)
+    4 -> do
+      putStrLn "Digite o registro do livro que deseja apagar: "
+      registro <- readLn
+      livroRemovido <- Livros.apagar registro (undefined :: Livro)
+      putStrLn "Livro removido com sucesso:"
+      imprimir livroRemovido
+    _ -> putStrLn "Opção inválida"
+
+menuEmprestimo :: IO ()
+menuEmprestimo = do
+  x <- Emprestimo.showmenu (undefined :: Emprestimo)
+  case x of
+    1 -> return ()
+    2 -> do
+      S emprestimos <- Emprestimo.obter (undefined :: Emprestimo)
+      imprimirLista emprestimos
+    3 -> do
+      Emprestimo.cadastrar (undefined :: Emprestimo)
+    4 -> do
+      putStrLn "Digite o número do empréstimo que deseja apagar: "
+      numero <- readLn
+      emprestimoRemovido <- Emprestimo.apagar numero (undefined :: Emprestimo)
+      putStrLn "Empréstimo removido com sucesso:"
+      imprimir emprestimoRemovido
+    _ -> putStrLn "Opção inválida"
+

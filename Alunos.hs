@@ -72,12 +72,6 @@ instance Dado Aluno where
           S alunos <- obter (undefined :: Aluno)
           let S alunoRemovido = remover aluno (S alunos)
           arq <- openFile "Aluno.txt" WriteMode
-          salvaAlunos arq alunoRemovido
+          salvaArquivo arq alunoRemovido
           hClose arq
           return aluno
-
-    where
-      salvaAlunos _ [] = return ()
-      salvaAlunos arq (a:as) = do
-        hPutStrLn arq (show a)
-        salvaAlunos arq as

@@ -71,12 +71,8 @@ instance Dado Livro where
             S livros <- obter (undefined :: Livro)
             let S livroRemovido = remover livro (S livros)
             arq <- openFile "Livro.txt" WriteMode
-            salvaLivros arq livroRemovido
+            salvaArquivo arq livroRemovido
             hClose arq
             return livro
-        where
-          salvaLivros _ [] = return ()
-          salvaLivros arq (l:ls) = do
-            hPutStrLn arq (show l)
-            salvaLivros arq ls
+
   
